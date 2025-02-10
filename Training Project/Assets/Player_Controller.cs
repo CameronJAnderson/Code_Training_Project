@@ -8,6 +8,8 @@ public class Player_Controller : MonoBehaviour
     // Start is called before the first frame update
     private PlayerInput _input;
     private Rigidbody2D _rigidbody;
+    public GameObject Ball;
+    private Vector2 _facingVector = Vector2.right;
     void Start()
     {
         //transform.position = new Vector2(3, -2);
@@ -33,7 +35,19 @@ void Update()
     {
         if (_input.actions["Fire"].WasPressedThisFrame())
         {
-            Debug.Log("Fire activated!");
+            //create a new object that is a clone of the ballPrefab
+            //at this object's position and default rotation
+            //and use a new variable (ball) to reference the clone
+            var ball = Instantiate(Ball,
+                                transform.position,
+                                Quaternion.identity);
+            //Get the Rigidbody 2D component from the new ball 
+            //and set its velocity to x:-10f, y:0, z:0
+            //ball.GetComponent<Rigidbody2D>().velocity = Vector2.left * 10f;
+            ball.GetComponent<Rigidbody2D>().velocity =
+            _facingVector.normalized * 10f;
+            ball.GetComponent<BallController>()?.SetDirection(_facingVector);
+
         }
     }
 
@@ -44,6 +58,10 @@ void Update()
 
         //change the velocity to match the Move (every physics update)
         _rigidbody.velocity = dir * 5;
+        if (dir.magnitude > 0.5)
+        {
+            _facingVector = _rigidbody.velocity;
+        }
     }
 }
 
