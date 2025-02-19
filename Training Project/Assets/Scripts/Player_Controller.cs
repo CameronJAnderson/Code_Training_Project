@@ -47,6 +47,7 @@ void Update()
             ball.GetComponent<Rigidbody2D>().velocity =
             _facingVector.normalized * 10f;
             ball.GetComponent<BallController>()?.SetDirection(_facingVector);
+            if (GameManager.Instance.State != GameState.Playing) return;
 
         }
     }
@@ -62,6 +63,7 @@ void Update()
         {
             _facingVector = _rigidbody.velocity;
         }
+        if (GameManager.Instance.State != GameState.Playing) return;
     }
 }
 
